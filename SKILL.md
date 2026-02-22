@@ -226,7 +226,7 @@ rm -rf public/media/{name}
 | **4. Collect Media** | Playwright/WebSearch | `media_manifest.json` |
 | **5. Publish Info (Part 1)** | Claude | `publish_info.md` |
 | **6. Thumbnail** | Remotion/imagen/imagenty | `thumbnail_*.png` |
-| **7. Generate Audio** | generate_tts.py | `.wav`, `.srt`, `timing.json` |
+| **7. Generate Audio** | generate_tts.py / generate_tts_volc_real.py | `.wav`, `.srt`, `timing.json` |
 | **8. Create Video** | Remotion | Composition ready |
 | **9. Render** | remotion render | `output.mp4` |
 | **10. Add BGM** | FFmpeg | `video_with_bgm.mp4` |
@@ -393,11 +393,33 @@ npx remotion still src/remotion/index.ts Thumbnail4x3 videos/{name}/thumbnail_re
 
 ---
 
-## Step 7: Generate TTS Audio
+## Step 7: Generate Subtitles or TTS Audio
+
+### 选项 1: 仅生成字幕 (SRT/LRC)
+
+如果您只需要字幕而不需要语音合成，请使用此选项：
+
+```bash
+cp ~/.claude/skills/video-podcast-maker/generate_subtitles_only.py .
+python3 generate_subtitles_only.py --input videos/{name}/podcast.txt --format srt --output-dir videos/{name}
+```
+
+这将直接从文本生成字幕文件（SRT或LRC格式），同时生成timing.json用于Remotion同步。
+
+### 选项 2: Azure TTS
+
+如果您需要语音合成，请使用：
 
 ```bash
 cp ~/.claude/skills/video-podcast-maker/generate_tts.py .
 python3 generate_tts.py --input videos/{name}/podcast.txt --output-dir videos/{name}
+```
+
+### 选项 3: 火山引擎 TTS
+
+```bash
+cp ~/.claude/skills/video-podcast-maker/generate_tts_volc_real.py .
+python3 generate_tts_volc_real.py --input videos/{name}/podcast.txt --output-dir videos/{name}
 ```
 
 **多音字处理** - 使用同音字替换：
@@ -798,13 +820,22 @@ npm install remotion @remotion/cli @remotion/player
 ### Environment Variables
 
 ```bash
-# Azure TTS (required)
+# Azure TTS (optional)
 export AZURE_SPEECH_KEY="your-azure-speech-key"
 export AZURE_SPEECH_REGION="eastasia"
+
+# Volcano Engine TTS (optional)
+export VOLC_ACCESS_KEY="your-volc-access-key"
+export VOLC_SECRET_KEY="your-volc-secret-key"
+export VOLC_REGION="cn-beijing"  # Default: cn-beijing
+export VOLC_VOICE_TYPE="zh_male_taocheng_uranus_bigtts"  # Default voice
 
 # Optional: AI image generation
 export GEMINI_API_KEY="..."        # imagen (Google)
 export DASHSCOPE_API_KEY="..."     # imagenty (阿里云)
+
+# Optional: TTS speech rate control (0.5-2.0, default 1.0)
+export TTS_RATE="1.0"
 ```
 
 ### Optional: AI Image Generation

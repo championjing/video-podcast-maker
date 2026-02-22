@@ -10,7 +10,7 @@ Automated pipeline to create professional video podcasts from a topic. **Optimiz
 
 - **Topic Research** - Web search and content gathering
 - **Script Writing** - Structured narration with section markers
-- **Azure TTS** - High-quality Chinese/English text-to-speech
+- **Azure TTS / Volcano Engine TTS** - High-quality Chinese/English text-to-speech
 - **Remotion Video** - React-based video composition with animations
 - **Visual Style Editing** - Adjust colors, fonts, and layout in Remotion Studio UI
 - **Real-time Preview** - Remotion Studio for instant debugging before render
@@ -63,7 +63,8 @@ npm install remotion @remotion/cli @remotion/player zod
 
 | Service | Purpose | Get Key |
 |---------|---------|---------|
-| **Azure Speech** | TTS audio generation (required) | [Azure Portal](https://portal.azure.com/) → Speech Services |
+| **Azure Speech** | TTS audio generation (optional) | [Azure Portal](https://portal.azure.com/) → Speech Services |
+| **Volcano Engine** | TTS audio generation (optional) | [Volcano Engine Console](https://console.volcengine.com/) → Speech Synthesis |
 | **Google Gemini** | AI thumbnail generation (optional) | [AI Studio](https://aistudio.google.com/) |
 | **Aliyun Dashscope** | AI thumbnail - Chinese optimized (optional) | [Aliyun Bailian](https://bailian.console.aliyun.com/) |
 
@@ -72,15 +73,24 @@ npm install remotion @remotion/cli @remotion/player zod
 Add to `~/.zshrc` or `~/.bashrc`:
 
 ```bash
-# Azure TTS (required)
+# Azure TTS (optional)
 export AZURE_SPEECH_KEY="your-azure-speech-key"
 export AZURE_SPEECH_REGION="eastasia"
+
+# Volcano Engine TTS (optional)
+export VOLC_ACCESS_KEY="your-volc-access-key"
+export VOLC_SECRET_KEY="your-volc-secret-key"
+export VOLC_REGION="cn-beijing"  # Default: cn-beijing
+export VOLC_VOICE_TYPE="zh_male_taocheng_uranus_bigtts"  # Default voice
 
 # Optional: Google Gemini for AI thumbnails
 export GEMINI_API_KEY="your-gemini-api-key"
 
 # Optional: Aliyun for AI thumbnails (Chinese optimized)
 export DASHSCOPE_API_KEY="your-dashscope-api-key"
+
+# Optional: TTS speech rate control (0.5-2.0, default 1.0)
+export TTS_RATE="1.0"
 ```
 
 Then reload: `source ~/.zshrc`

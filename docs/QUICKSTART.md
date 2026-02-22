@@ -14,9 +14,9 @@
 | Python 3.8+ | `brew install python3` |
 | FFmpeg | `brew install ffmpeg` |
 
-### 必需 API 密钥
+### 可选 API 密钥
 
-**Azure Speech** - TTS 语音合成（必需）
+**Azure TTS (可选)**
 
 ```bash
 # 添加到 ~/.zshrc
@@ -24,7 +24,19 @@ export AZURE_SPEECH_KEY="your-azure-speech-key"
 export AZURE_SPEECH_REGION="eastasia"
 ```
 
-获取方式：[Azure 门户](https://portal.azure.com/) → 创建"语音服务"资源
+**火山引擎 TTS (可选)**
+
+```bash
+# 添加到 ~/.zshrc
+export VOLC_ACCESS_KEY="your-volc-access-key"
+export VOLC_SECRET_KEY="your-volc-secret-key"
+export VOLC_REGION="cn-beijing"  # 默认 cn-beijing
+export VOLC_VOICE_TYPE="zh_male_taocheng_uranus_bigtts"  # 默认音色
+```
+
+获取方式：
+- Azure: [Azure 门户](https://portal.azure.com/) → 创建"语音服务"资源
+- 火山引擎: [火山引擎控制台](https://console.volcengine.com/) → 语音合成服务
 
 ### Python 依赖
 
@@ -55,7 +67,7 @@ Claude 会自动引导你完成所有步骤。无需记住任何命令。
 | **4. 收集素材** | 截图、Logo、图片 | `public/media/{name}/` |
 | **5. 发布信息** | 标题、标签、简介 | `publish_info.md` |
 | **6. 封面** | Remotion 或 AI 生成 | `thumbnail_*.png` |
-| **7. 生成音频** | Azure TTS | `podcast_audio.wav` + `timing.json` |
+| **7. 生成音频** | Azure TTS / 火山引擎 TTS | `podcast_audio.wav` + `timing.json` |
 | **8. 创建视频** | 编写 Remotion 组件 | `src/remotion/` |
 | **9. 渲染** | Remotion render | `output.mp4` |
 | **10. 混音** | FFmpeg 叠加 BGM | `video_with_bgm.mp4` |
@@ -92,6 +104,8 @@ public/media/{video-name}/   # Remotion 素材目录
 
 ### TTS 音频生成
 
+#### 选项 1: Azure TTS
+
 ```bash
 # 在视频目录下运行
 cd videos/{name}
@@ -100,6 +114,18 @@ python3 ~/.claude/skills/video-podcast-maker/generate_tts.py
 # 调整语速
 TTS_RATE="+15%" python3 ~/.claude/skills/video-podcast-maker/generate_tts.py  # 加快
 TTS_RATE="-10%" python3 ~/.claude/skills/video-podcast-maker/generate_tts.py  # 放慢
+```
+
+#### 选项 2: 火山引擎 TTS
+
+```bash
+# 在视频目录下运行
+cd videos/{name}
+python3 ~/.claude/skills/video-podcast-maker/generate_tts_volc_real.py
+
+# 调整语速
+TTS_RATE="1.15" python3 ~/.claude/skills/video-podcast-maker/generate_tts_volc_real.py  # 加快
+TTS_RATE="0.9" python3 ~/.claude/skills/video-podcast-maker/generate_tts_volc_real.py  # 放慢
 ```
 
 产出：`podcast_audio.wav`, `podcast_audio.srt`, `timing.json`

@@ -10,7 +10,7 @@
 
 - **主题研究** - 网络搜索与内容收集
 - **脚本撰写** - 带章节标记的结构化旁白
-- **Azure TTS** - 高质量中英文语音合成
+- **Azure TTS / 火山引擎 TTS** - 高质量中英文语音合成
 - **Remotion 视频** - 基于 React 的视频合成与动画
 - **可视化样式编辑** - 在 Remotion Studio 界面调整颜色、字体、布局
 - **实时预览** - Remotion Studio 即时调试，渲染前预览效果
@@ -63,7 +63,8 @@ npm install remotion @remotion/cli @remotion/player zod
 
 | 服务 | 用途 | 获取方式 |
 |------|------|---------|
-| **Azure Speech** | TTS 语音合成（必需） | [Azure 门户](https://portal.azure.com/) → 语音服务 |
+| **Azure Speech** | TTS 语音合成（可选） | [Azure 门户](https://portal.azure.com/) → 语音服务 |
+| **火山引擎** | TTS 语音合成（可选） | [火山引擎控制台](https://console.volcengine.com/) → 语音合成服务 |
 | **Google Gemini** | AI 封面生成（可选） | [AI Studio](https://aistudio.google.com/) |
 | **阿里云百炼** | AI 封面生成 - 中文优化（可选） | [百炼控制台](https://bailian.console.aliyun.com/) |
 
@@ -72,15 +73,24 @@ npm install remotion @remotion/cli @remotion/player zod
 添加到 `~/.zshrc` 或 `~/.bashrc`：
 
 ```bash
-# Azure TTS（必需）
+# Azure TTS（可选）
 export AZURE_SPEECH_KEY="your-azure-speech-key"
 export AZURE_SPEECH_REGION="eastasia"
+
+# 火山引擎 TTS（可选）
+export VOLC_ACCESS_KEY="your-volc-access-key"
+export VOLC_SECRET_KEY="your-volc-secret-key"
+export VOLC_REGION="cn-beijing"  # 默认 cn-beijing
+export VOLC_VOICE_TYPE="zh_male_taocheng_uranus_bigtts"  # 默认音色
 
 # 可选：Google Gemini 生成 AI 封面
 export GEMINI_API_KEY="your-gemini-api-key"
 
 # 可选：阿里云百炼生成 AI 封面（中文优化）
 export DASHSCOPE_API_KEY="your-dashscope-api-key"
+
+# 可选：TTS 语速控制（0.5-2.0，默认 1.0）
+export TTS_RATE="1.0"
 ```
 
 然后重新加载：`source ~/.zshrc`

@@ -54,9 +54,44 @@ curl -X POST "https://${AZURE_TTS_REGION}.tts.speech.microsoft.com/cognitiveserv
 - 定期检查 Azure 订阅状态
 - 设置配额告警
 
+### 1.2 火山引擎 API 密钥错误
+
+**症状**
+```
+Error: VOLC_ACCESS_KEY and VOLC_SECRET_KEY not set
+HTTP 401 Unauthorized
+Error: Invalid authentication credentials
+```
+
+**原因**
+- API Key 未设置或已过期
+- Region 配置错误
+- 服务未开通或超出配额
+
+**解决方案**
+```bash
+# 检查环境变量
+echo $VOLC_ACCESS_KEY
+echo $VOLC_SECRET_KEY
+echo $VOLC_REGION
+
+# 设置环境变量
+export VOLC_ACCESS_KEY="your-volc-access-key"
+export VOLC_SECRET_KEY="your-volc-secret-key"
+export VOLC_REGION="cn-beijing"  # 或其他可用区域
+
+# 验证环境变量
+source ~/.zshrc
+```
+
+**预防**
+- 将 API Key 存储在 `.env` 文件中
+- 定期检查火山引擎服务状态
+- 设置访问密钥的权限范围
+
 ---
 
-### 1.2 音频质量问题
+### 1.3 音频质量问题
 
 **症状**
 - 音频听起来模糊或有噪音
@@ -91,7 +126,7 @@ ffmpeg -i input.mp3 -ar 48000 output.mp3
 
 ---
 
-### 1.3 中英文发音问题
+### 1.4 中英文发音问题
 
 **症状**
 - 英文单词被读成拼音
@@ -135,7 +170,7 @@ def wrap_english(text):
 
 ---
 
-### 1.4 多音字处理
+### 1.5 多音字处理
 
 **症状**
 - "重要" 被读成 "chóng yào" 而不是 "zhòng yào"
@@ -183,7 +218,7 @@ def fix_polyphonic(text):
 
 ---
 
-### 1.5 语速控制问题
+### 1.6 语速控制问题
 
 **症状**
 - 语音过快听不清
@@ -1249,9 +1284,18 @@ npx remotion browser list              # 可用浏览器
 ### B. 常用环境变量
 
 ```bash
-# TTS
+# Azure TTS
 export AZURE_TTS_KEY="your-key"
 export AZURE_TTS_REGION="eastasia"
+
+# 火山引擎 TTS
+export VOLC_ACCESS_KEY="your-volc-access-key"
+export VOLC_SECRET_KEY="your-volc-secret-key"
+export VOLC_REGION="cn-beijing"
+export VOLC_VOICE_TYPE="zh_male_taocheng_uranus_bigtts"
+
+# 通用 TTS 设置
+export TTS_RATE="1.0"  # 语速控制 (0.5-2.0)
 
 # Remotion
 export REMOTION_LOG_LEVEL="verbose"
